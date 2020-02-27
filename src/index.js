@@ -1,12 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+// 1. Import Firebase app
+import * as firebase from "firebase/app";
+// 2. Import the auth module
+import "firebase/auth";
+// 3. Import Firestore module
+import "firebase/firestore";
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// 4. Initialize Firebase using values that you can find at:
+// https://console.firebase.google.com/project/_/settings/general/
+firebase.initializeApp({
+  apiKey: "AIzaSyCWG-cL-QJZ3OV2QVRForOMpIUZla1DepA",
+  projectId: "tame-impala-chart"
+});
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+ReactDOM.render(<App />, document.getElementById("root"));
+
 serviceWorker.unregister();
