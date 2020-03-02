@@ -3,17 +3,15 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 
 export default function App() {
-  // 1. Create state to store the songs
   const [songs, setSongs] = useState();
   useEffect(() => {
-    // 2. Query all documents in the songs collection
-    firebase
-      .firestore()
-      .collection("songs")
-      .get()
-      // 3. When the query is resolved, save the documents
-      // to the state
-      .then(songs => setSongs(songs.docs));
+    return (
+      firebase
+        .firestore()
+        .collection("songs")
+        // Pass callback to receive updated songs
+        .onSnapshot(songs => setSongs(songs.docs))
+    );
   }, []);
 
   return (
@@ -58,16 +56,10 @@ async function handleSubmit(e) {
   e.preventDefault();
   const form = e.target;
 
-  // 1. Get data from the form
   const title = form.title.value;
   const rating = parseInt(form.rating.value);
-
-  // 2. Get Firestore instance
   const firestore = firebase.firestore();
 
-  // 3. Add a document to the songs collection with random id
-  const song = await firestore.collection("songs").add({ title, rating });
-
-  alert(`Added ${title} song with id ${song.id}`);
+  firestore.collection("songs").add({ title, rating });
   form.reset();
 }
