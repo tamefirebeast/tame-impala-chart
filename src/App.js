@@ -5,13 +5,10 @@ import "./App.css";
 export default function App() {
   const [songs, setSongs] = useState();
   useEffect(() => {
-    return (
-      firebase
-        .firestore()
-        .collection("songs")
-        // Pass callback to receive updated songs
-        .onSnapshot(songs => setSongs(songs.docs))
-    );
+    return firebase
+      .firestore()
+      .collection("songs")
+      .onSnapshot(songs => setSongs(songs.docs));
   }, []);
 
   return (
@@ -22,7 +19,18 @@ export default function App() {
         {songs
           ? songs.map(song => (
               <li key={song.id}>
-                {song.data().title} ({song.data().rating})
+                {song.data().title}{" "}
+                <input
+                  value={song.data().rating}
+                  onChange={e => {
+                    // Update the rating:
+                    song.ref.update({ rating: parseInt(e.target.value) });
+                  }}
+                  type="number"
+                  min="0"
+                  max="100"
+                  required
+                />
               </li>
             ))
           : "Loading..."}
