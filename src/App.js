@@ -17,22 +17,37 @@ export default function App() {
 
       <ul>
         {songs
-          ? songs.map(song => (
-              <li key={song.id}>
-                {song.data().title}{" "}
-                <input
-                  value={song.data().rating}
-                  onChange={e => {
-                    // Update the rating:
-                    song.ref.update({ rating: parseInt(e.target.value) });
-                  }}
-                  type="number"
-                  min="0"
-                  max="100"
-                  required
-                />
-              </li>
-            ))
+          ? songs.map(song => {
+              const data = song.data();
+              return (
+                <li key={song.id}>
+                  {song.data().title}{" "}
+                  <input
+                    value={data.rating}
+                    onChange={e =>
+                      song.ref.update({ rating: parseInt(e.target.value) })
+                    }
+                    type="number"
+                    min="0"
+                    max="100"
+                    required
+                  />{" "}
+                  <button
+                    onClick={e => {
+                      e.preventDefault();
+                      // 2. Confirm the deletion
+                      const confirmDelete = window.confirm(
+                        `Do you want to remove ${data.input}?`
+                      );
+                      // 3. Delete the component; delete returns a promise
+                      confirmDelete && song.ref.delete();
+                    }}
+                  >
+                    Remove
+                  </button>
+                </li>
+              );
+            })
           : "Loading..."}
       </ul>
 
