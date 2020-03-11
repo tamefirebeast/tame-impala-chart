@@ -38,7 +38,9 @@ export default function App() {
         <h1>Please sign in</h1>
         <button
           onClick={() => {
-            // TODO: Add the sign in handler.
+            // 1. Create the Google auth provider
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider);
           }}
         >
           Sign in with Google
@@ -48,6 +50,18 @@ export default function App() {
   } else {
     return (
       <div className="App">
+        <div>
+          Signed in as {user.email} |{" "}
+          <button
+            onClick={() => {
+              // Sign out the user
+              firebase.auth().signOut();
+            }}
+          >
+            Sign out
+          </button>
+        </div>
+
         <h1>My Favourite Tame Impala Songs</h1>
 
         <ul>
