@@ -16,11 +16,22 @@ export default function App() {
 
   const [songs, setSongs] = useState();
   useEffect(() => {
-    return firebase
-      .firestore()
-      .collection("songs")
-      .onSnapshot(songs => setSongs(songs.docs));
-  }, []);
+    if (user) {
+      // 1. If the user is defined then perform the query
+      return (
+        firebase
+          .firestore()
+          .collection("songs")
+          // 2. Query documents with userId equal the current user uid
+          .where("userId", "==", user.uid)
+          .onSnapshot(songs => setSongs(songs.docs))
+      );
+    } else if (songs) {
+      // 3. If the user is signed out, clear the fetched songs
+      setSongs(undefined);
+    }
+    // 4. Use the current user uid as the hook dependency
+  }, [user?.uid]);
 
   if (user === undefined) {
     return <div className="App">Loading...</div>;
