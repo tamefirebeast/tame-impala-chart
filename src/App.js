@@ -3,18 +3,12 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 
 export default function App() {
-  // 1. Create a state to store the user.
-  // When the user's undefined, then the auth isn't initialized.
-  // When it's null, then the user is not logged in.
   const [user, setUser] = useState();
   useEffect(() => {
-    // 2. Add auth state change listener.
     firebase.auth().onAuthStateChanged(userData => {
       if (userData) {
-        // 3. Save the user data to the state if it's logged in.
         setUser(userData);
       } else {
-        // 4. Set the user to null to indicate that it's not logged in.
         setUser(null);
       }
     });
@@ -29,16 +23,13 @@ export default function App() {
   }, []);
 
   if (user === undefined) {
-    // 5. Display loading.
     return <div className="App">Loading...</div>;
   } else if (user === null) {
-    // 6. Display the sign in button.
     return (
       <div className="App">
         <h1>Please sign in</h1>
         <button
           onClick={() => {
-            // 1. Create the Google auth provider
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider);
           }}
@@ -52,14 +43,7 @@ export default function App() {
       <div className="App">
         <div>
           Signed in as {user.email} |{" "}
-          <button
-            onClick={() => {
-              // Sign out the user
-              firebase.auth().signOut();
-            }}
-          >
-            Sign out
-          </button>
+          <button onClick={() => firebase.auth().signOut()}>Sign out</button>
         </div>
 
         <h1>My Favourite Tame Impala Songs</h1>
